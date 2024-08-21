@@ -3,6 +3,13 @@ pipeline {
     tools {
         maven 'MAVEN_3.9.8' 
     }
+    triggers {
+        pollSCM('* * * * *')
+    }
+    parameters {
+        string(name: 'GOALS', defaultValue: 'clean package')
+
+    }
     stages {
         stage('SCM') {
             steps {
@@ -13,9 +20,7 @@ pipeline {
         }
         stage('BUILD') {
             steps {
-                sh 'mvn --version'
-                sh 'mvn validate'
-
+                sh "mvn ${params.GOALS}"
             }
 
         }
